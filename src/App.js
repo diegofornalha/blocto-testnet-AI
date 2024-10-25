@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import styled from "styled-components";
 import Authenticate from "./Authenticate"; // Componente para login/logout
-import SendTransaction from "./SendTransaction"; // Componente para enviar transações
-import DeployContract from "./DeployContract"; // Adicione esta linha
+// Lazy load para componentes que não são necessários imediatamente
+const SendTransaction = lazy(() => import("./SendTransaction"));
+const DeployContract = lazy(() => import("./DeployContract"));
 
 // Estilos globais para o Wrapper principal
 const Wrapper = styled.div`
@@ -60,13 +61,17 @@ function App() {
         {/* Seção de Transações */}
         <Section>
           <SubTitle>Enviar Transação</SubTitle>
-          <SendTransaction /> {/* Componente para enviar transações */}
+          <Suspense fallback={<div>Carregando...</div>}>
+            <SendTransaction /> {/* Componente para enviar transações */}
+          </Suspense>
         </Section>
 
         {/* Seção de Implantação de Contrato */}
         <Section>
           <SubTitle>Implantar Contrato</SubTitle>
-          <DeployContract /> {/* Adicione esta linha */}
+          <Suspense fallback={<div>Carregando...</div>}>
+            <DeployContract /> {/* Componente para implantar contratos */}
+          </Suspense>
         </Section>
       </Container>
     </Wrapper>

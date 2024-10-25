@@ -18,57 +18,17 @@ const DeployContract = () => {
     setStatus("Implantando contrato...");
 
     try {
-      const transactionId = await fcl.mutate({
-        cadence: `
-          transaction(code: String) {
-            prepare(signer: AuthAccount) {
-              // Aqui vai o código do seu contrato
-              let code = "
-              // Este é um contrato público chamado Counter (Contador)
-access(all) contract Counter {
-   // Variável pública que armazena o valor atual do contador
-   access(all) var count: Int
-
-   // Função pública para incrementar o contador
-   access(all) fun increment() {
-      self.count = self.count + 1
-   }
-
-   // Função pública para decrementar o contador
-   access(all) fun decrement() {
-      self.count = self.count - 1
-   }
-
-   // Função pública para obter o valor atual do contador
-   // Tecnicamente, esta função não é necessária,
-   // pois podemos ler a variável 'count' diretamente
-   access(all) fun get(): Int {
-      return self.count
-   }
-
-   // Função de inicialização do contrato
-   init() {
-      // Inicializa o contador com zero
-      self.count = 0
-   }
-}
-
-              "
-              
-              // Implanta o contrato
-              signer.contracts.add(name: "MeuContrato", code: code.decodeHex())
-            }
-          }
-        `,
+      // Adicione aqui a lógica para enviar a transação de deploy
+      const txId = await fcl.mutate({
+        cadence: contractCode,
         proposer: fcl.currentUser().authorization,
         payer: fcl.currentUser().authorization,
         authorizations: [fcl.currentUser().authorization],
         limit: 100,
       });
 
-      setTransactionId(transactionId);
-
-      const transaction = await fcl.tx(transactionId).onceSealed();
+      setTransactionId(txId);
+      const transaction = await fcl.tx(txId).onceSealed();
 
       if (transaction.status === 4) {
         setStatus("Contrato implantado com sucesso!");

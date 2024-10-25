@@ -57,7 +57,7 @@ const SendTransaction = () => {
       const txStatus = await fcl.tx(txId).onceSealed();
 
       if (txStatus.status === 4) {
-        setStatus("Transação bem-sucedida!"); // Exibe mensagem de sucesso
+        setStatus(`Transação enviada com sucesso! ID: ${txId}`); // Mensagem de sucesso
       } else {
         setStatus(`Erro ao processar a transação: Status ${txStatus.status}`);
       }
@@ -102,9 +102,9 @@ const SendTransaction = () => {
       {/* Exibe o status da transação */}
       {status && (
         <Box my={2} width="100%" display="flex" justifyContent="center">
-          {status === "Transação bem-sucedida!" ? (
+          {status === "Transação enviada com sucesso!" ? (
             <Alert severity="success" style={{ textAlign: "center" }}>
-              {status} <br />
+              {status}
               {/* Link para visualizar a transação no FlowScan */}
               {transactionId && (
                 <Link
